@@ -28,8 +28,9 @@ INDEX_MODEL = DEFAULT_MODEL  # the model the corpus is embedded with
 
 def _document(case: dict) -> str:
     """The text that gets embedded for semantic search over a case."""
+    year_str = f" ({case['year']})" if case.get("year") else ""
     return (
-        f"{case['name']} ({case['citation']})\n"
+        f"{case['name']} ({case['citation']}){year_str}\n"
         f"Area: {case['issue_area']}\n"
         f"Opinion: {case['text']}"
     )
