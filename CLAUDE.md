@@ -12,8 +12,11 @@ notes ever disagree with it, trust the README.
   search) and `get_case` (fetch a precedent by id), exposed to the model
   via `TOOL_SCHEMAS` / `TOOL_REGISTRY`.
 - `agent.py` is the classifier: a bounded tool-use loop (first call forces
-  one retrieval, then `auto`), followed by a schema-constrained verdict —
-  `winning_party` enum + `reasoning` — via `response_format`.
+  one retrieval, then `auto`, with a duplicate-call guard), followed by a
+  schema-constrained verdict via `response_format` that argues both sides
+  before the `winning_party` enum (property order = generation order), and
+  a programmatic grounding verifier (reasoning must cite retrieved cases;
+  one retry, then flagged `[ungrounded]`).
 - `llm.py` wraps OpenAI chat completions with token/cost tracking; falls
   back to a deterministic `MockLLM` when `OPENAI_API_KEY` is unset.
 - `metrics.py` scores runs: accuracy, coverage, majority-class baseline,
