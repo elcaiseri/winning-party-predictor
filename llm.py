@@ -56,7 +56,7 @@ PRICING = {
     "gpt-4.1-mini": (0.40, 1.60),
     "gpt-4.1": (2.00, 8.00),
 }
-DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_MODEL = "gpt-4o"
 
 # Fixed decoding params so runs are reproducible.
 SEED = 20240517
