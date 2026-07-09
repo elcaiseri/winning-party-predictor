@@ -109,7 +109,11 @@ class OpenAILLM(_UsageMixin):
         choice = resp.choices[0]
         msg = choice.message
         tool_calls = [
-            ToolCall(id=tc.id, name=tc.function.name, input=json.loads(tc.function.arguments or "{}"))
+            ToolCall(
+                id=tc.id,
+                name=tc.function.name,
+                input=json.loads(tc.function.arguments or "{}"),
+            )
             for tc in (msg.tool_calls or [])
         ]
         usage = resp.usage
@@ -129,6 +133,7 @@ class OpenAILLM(_UsageMixin):
 # Offline smoke-test fallback. Deterministic, not intelligent.
 # ---------------------------------------------------------------------------
 
+
 class MockLLM(_UsageMixin):
     def __init__(self, model: str = DEFAULT_MODEL) -> None:
         self._model = model
@@ -136,7 +141,14 @@ class MockLLM(_UsageMixin):
         self._output_tokens = 0
 
     def _charge(self, messages, out_text) -> tuple[int, int]:
-        inp = sum(len(m.get("content", "") or "") for m in messages if isinstance(m.get("content"), str)) // 4
+        inp = (
+            sum(
+                len(m.get("content", "") or "")
+                for m in messages
+                if isinstance(m.get("content"), str)
+            )
+            // 4
+        )
         out = max(1, len(out_text) // 4)
         self._input_tokens += inp
         self._output_tokens += out
@@ -150,8 +162,7 @@ class MockLLM(_UsageMixin):
         tool_choice: str | None = None,
     ) -> LLMResponse:
         blob = " ".join(
-            m.get("content", "") for m in messages
-            if isinstance(m.get("content"), str)
+            m.get("content", "") for m in messages if isinstance(m.get("content"), str)
         )
         already_searched = "winning_party" in blob or any(
             m.get("role") == "tool" for m in messages
@@ -170,7 +181,10 @@ class MockLLM(_UsageMixin):
         # Answer turn. Structured or plain, always a deterministic guess.
         if response_format:
             text = json.dumps(
-                {"winning_party": "petitioner", "reasoning": "(mock) similar precedents favor the petitioner."}
+                {
+                    "winning_party": "petitioner",
+                    "reasoning": "(mock) similar precedents favor the petitioner.",
+                }
             )
         else:
             text = "Based on the precedent, the petitioner is likely to prevail."

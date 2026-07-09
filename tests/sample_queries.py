@@ -32,12 +32,20 @@ if __name__ == "__main__":
         pred = run_agent(case, llm=llm)
         expected = case["expected_winner"]
         mark = "ok " if pred.predicted_winner == expected else "XX "
-        print(f"{mark} {case['id'][:34].ljust(34)} predicted={str(pred.predicted_winner):11} expected={expected}")
+        print(
+            f"{mark} {case['id'][:34].ljust(34)} predicted={str(pred.predicted_winner):11} expected={expected}"
+        )
         if pred.reasoning:
             print(f"      reasoning: {pred.reasoning[:160]}")
         results.append(
-            {"case_id": case["id"], "predicted": pred.predicted_winner, "expected": expected}
+            {
+                "case_id": case["id"],
+                "predicted": pred.predicted_winner,
+                "expected": expected,
+            }
         )
 
     print(f"\n[evaluation] {evaluate(results)}")
-    print(f"[usage] total_tokens={llm.total_tokens()} total_cost=${llm.total_cost():.4f}")
+    print(
+        f"[usage] total_tokens={llm.total_tokens()} total_cost=${llm.total_cost():.4f}"
+    )

@@ -12,3 +12,6 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["E402"]

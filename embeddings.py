@@ -65,7 +65,9 @@ class LocalEmbeddingFunction(EmbeddingFunction):
 
     def __call__(self, input: Documents) -> Embeddings:
         texts = list(input)
-        return self._encode_remote(texts) if EMBED_BASE_URL else self._encode_local(texts)
+        return (
+            self._encode_remote(texts) if EMBED_BASE_URL else self._encode_local(texts)
+        )
 
     @staticmethod
     def name() -> str:

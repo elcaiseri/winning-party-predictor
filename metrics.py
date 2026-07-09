@@ -41,12 +41,22 @@ def evaluate(results: list[dict[str, Any]]) -> dict[str, Any]:
     per_class: dict[str, dict[str, float | int]] = {}
     recalls: list[float] = []
     for label in labels:
-        tp = sum(1 for r in results if r["predicted"] == label and r["expected"] == label)
-        fp = sum(1 for r in results if r["predicted"] == label and r["expected"] != label)
-        fn = sum(1 for r in results if r["predicted"] != label and r["expected"] == label)
+        tp = sum(
+            1 for r in results if r["predicted"] == label and r["expected"] == label
+        )
+        fp = sum(
+            1 for r in results if r["predicted"] == label and r["expected"] != label
+        )
+        fn = sum(
+            1 for r in results if r["predicted"] != label and r["expected"] == label
+        )
         precision = tp / (tp + fp) if (tp + fp) else 0.0
         recall = tp / (tp + fn) if (tp + fn) else 0.0
-        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
+        f1 = (
+            2 * precision * recall / (precision + recall)
+            if (precision + recall)
+            else 0.0
+        )
         recalls.append(recall)
         per_class[label] = {
             "precision": round(precision, 3),

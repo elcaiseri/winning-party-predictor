@@ -91,8 +91,14 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Fact pattern or legal question."},
-                    "k": {"type": "integer", "description": "Number of precedents to return (default 5)."},
+                    "query": {
+                        "type": "string",
+                        "description": "Fact pattern or legal question.",
+                    },
+                    "k": {
+                        "type": "integer",
+                        "description": "Number of precedents to return (default 5).",
+                    },
                 },
                 "required": ["query"],
             },
@@ -106,7 +112,10 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "case_id": {"type": "string", "description": "Precedent id, e.g. 'terry-v-ohio'."},
+                    "case_id": {
+                        "type": "string",
+                        "description": "Precedent id, e.g. 'terry-v-ohio'.",
+                    },
                 },
                 "required": ["case_id"],
             },

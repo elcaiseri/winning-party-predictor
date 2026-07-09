@@ -66,7 +66,12 @@ RESPONSE_FORMAT: dict[str, Any] = {
                     ),
                 },
             },
-            "required": ["for_petitioner", "for_respondent", "winning_party", "reasoning"],
+            "required": [
+                "for_petitioner",
+                "for_respondent",
+                "winning_party",
+                "reasoning",
+            ],
             "additionalProperties": False,
         },
     },
@@ -171,7 +176,9 @@ def run_agent(case: dict[str, Any], llm=None) -> Prediction:
 
     # Force at least one retrieval so the verdict is grounded, then let the
     # model decide whether it needs more ("auto") so it can stop searching.
-    resp: LLMResponse = llm.complete(messages, tools=TOOL_SCHEMAS, tool_choice="required")
+    resp: LLMResponse = llm.complete(
+        messages, tools=TOOL_SCHEMAS, tool_choice="required"
+    )
 
     rounds = 0
     seen_calls: set[tuple[str, str]] = set()
@@ -180,7 +187,9 @@ def run_agent(case: dict[str, Any], llm=None) -> Prediction:
         for tc in resp.tool_calls:
             sig = (tc.name, json.dumps(tc.input, sort_keys=True))
             if sig in seen_calls:
-                result = {"note": "Duplicate call skipped — use the results you already have."}
+                result = {
+                    "note": "Duplicate call skipped — use the results you already have."
+                }
             else:
                 seen_calls.add(sig)
                 result = _run_tool(tc.name, tc.input)
